@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Political Preparedness</string>
+
+    <string name="elections">Upcoming Elections</string>
+    <string name="representatives">Find My Representatives</string>
+    <string name="saved_elections">Saved Elections</string>
+
+    <string name="follow">Follow Election</string>
+    <string name="unfollow">Unfollow Election</string>
+
+
+</resources>
