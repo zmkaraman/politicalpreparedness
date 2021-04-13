@@ -50,7 +50,6 @@ class ElectionsFragment : Fragment() {
         //Add binding values
         viewModelAdapter = ElectionListAdapter(ElectionListAdapter.ElectionListener { election ->
             // Link elections to voter info
-            Toast.makeText(context, "Election: ${election.name}", Toast.LENGTH_SHORT).show()
             this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
 
         })

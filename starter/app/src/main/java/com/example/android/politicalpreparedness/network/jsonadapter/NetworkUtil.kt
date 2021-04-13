@@ -1,6 +1,8 @@
 package com.example.android.politicalpreparedness.network.jsonadapter
 
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.google.gson.Gson
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 
@@ -8,9 +10,6 @@ import java.text.SimpleDateFormat
 fun parseElectionsJsonResult(jsonResult: JSONObject): ArrayList<Election> {
 
     val electionsJson = jsonResult.getJSONArray("elections")
-    val electionAdapter : ElectionAdapter = ElectionAdapter()
-
-
     val electionList = ArrayList<Election>()
 
     for (i in 0 until electionsJson.length()) {
@@ -20,13 +19,29 @@ fun parseElectionsJsonResult(jsonResult: JSONObject): ArrayList<Election> {
         val electionDay = electionJson.getString("electionDay")
         val division = electionJson.getString("ocdDivisionId")
 
-        val div = electionAdapter.divisionFromJson(division)
+        val div = divisionFromJson(division)
         val date = SimpleDateFormat("YYYY-MM-DD").parse(electionDay)
-
+        //var el = Gson()?.fromJson(electionsJson.getJSONObject(i).toString(), Election::class.java)
 
         val election = Election(id.toInt(), name, date, div)
         electionList.add(election)
     }
 
     return electionList
+}
+
+fun parseVoterJsonResult(jsonResult: JSONObject): VoterInfoResponse {
+
+    return Gson()?.fromJson(jsonResult.toString(), VoterInfoResponse::class.java)
+
+   /* val voterInfoResponse = VoterInfoResponse(stateJson)
+
+    for (i in 0 until stateJson.length()) {
+        val sJson = stateJson.getJSONObject(i)
+        val name = sJson.getString("name")
+        val electionDay = sJson.getString("electionDay")
+        val division = sJson.getString("ocdDivisionId")
+
+    }*/
+
 }

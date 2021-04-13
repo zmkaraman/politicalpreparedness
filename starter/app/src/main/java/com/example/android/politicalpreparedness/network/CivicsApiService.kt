@@ -36,8 +36,9 @@ interface CivicsApiService {
     suspend fun getElections(@Query("key") apiKey: String = API_KEY) : ResponseBody
 
     //TODO: Add voterinfo API Call
+    //https://www.googleapis.com/civicinfo/v2/voterinfo?key=AIzaSyCv7qJbUF87wxet4psRA_P3hKqLEDvsFVg&voter_key=us,%20la&electionId=7022
     @GET("voterinfo")
-    suspend fun getVoterInfo(@Query("voter_key") voterKey: String?, @Query("key") apiKey: String = API_KEY) : ResponseBody
+    suspend fun getVoterInfo(@Query("key") apiKey: String = API_KEY, @Query("voter_key") voterKey: String?, @Query("electionId") electionId: String?) : ResponseBody
 
 
     //https://www.googleapis.com/civicinfo/v2/representatives  byadress
