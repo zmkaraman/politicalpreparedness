@@ -57,18 +57,17 @@ class VoterInfoFragment : Fragment() {
 
             val division = VoterInfoFragmentArgs.fromBundle(it).argDivision
             val electionId = VoterInfoFragmentArgs.fromBundle(it).argElectionId
-            val election = VoterInfoFragmentArgs.fromBundle(it).argElection
-            electionVoterInfo = election
+            electionVoterInfo = VoterInfoFragmentArgs.fromBundle(it).argElection
+            //electionVoterInfo = election
 
             // Add binding values
-            binding.title.text = election.name
+            binding.title.text = electionVoterInfo.name
 
             //Populate voter info -- hide views without provided data.
             var voterKey = division.country + ", " + division.state
             viewModel.getVoterInfo(electionId = electionId.toString(), voterKey = voterKey)
 
             binding.stateBallot.setOnClickListener {
-                //openUrl("http://www.stackoverflow.com")
                 openUrl(viewModel.voterInfoResponse.value?.state?.first()?.electionAdministrationBody?.ballotInfoUrl ?: "")
             }
 

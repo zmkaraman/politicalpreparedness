@@ -35,20 +35,20 @@ interface CivicsApiService {
     @GET("elections")
     suspend fun getElections(@Query("key") apiKey: String = API_KEY) : ResponseBody
 
-    //TODO: Add voterinfo API Call
     //https://www.googleapis.com/civicinfo/v2/voterinfo?key=AIzaSyCv7qJbUF87wxet4psRA_P3hKqLEDvsFVg&voter_key=us,%20la&electionId=7022
     @GET("voterinfo")
     suspend fun getVoterInfo(@Query("key") apiKey: String = API_KEY, @Query("voter_key") voterKey: String?, @Query("electionId") electionId: String?) : ResponseBody
 
 
     //https://www.googleapis.com/civicinfo/v2/representatives  byadress
-    @GET("voterinfo")
-    suspend fun getRepresentativesByAdresss(@Query("voter_key") voterKey: String?, @Query("api_key") apiKey: String = API_KEY) : ResponseBody
+    @GET("representatives")
+    suspend fun getRepresentativesByAdress(@Query("key") apiKey: String = API_KEY, @Query("address") address: String) : ResponseBody
 
 
-    //GET https://www.googleapis.com/civicinfo/v2/representatives/ocdId  by division
-    @GET("voterinfo/")
-    suspend fun getRepresentativesByOcdId(@Query("ocdId") ocdId: String?, @Query("api_key") apiKey: String = API_KEY) : ResponseBody
+    //TODO MERVE burasinin cagrimi farkli duzeltilmeli
+    //https://civicinfo.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus?key=AIzaSyCv7qJbUF87wxet4psRA_P3hKqLEDvsFVg
+    @GET("representatives/")
+    suspend fun getRepresentativesByOcdId(@Query("ocdId") ocdId: String?, @Query("key") apiKey: String = API_KEY) : ResponseBody
 
 }
 

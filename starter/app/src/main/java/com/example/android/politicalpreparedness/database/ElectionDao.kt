@@ -23,6 +23,6 @@ interface ElectionDao {
 
     //Add clear query
     @Query("DELETE FROM election_table")
-    suspend fun clear()*/
-
+    suspend fun clear()
+*/
 }
