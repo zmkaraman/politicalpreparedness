@@ -44,7 +44,7 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             binding.executePendingBindings()
         }
 
-        //TODO: Add companion object to inflate ViewHolder (from)
+        // Add companion object to inflate ViewHolder (from)
         companion object {
             fun from(parent: ViewGroup): RepresentativeListAdapter.RepresentativeViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)

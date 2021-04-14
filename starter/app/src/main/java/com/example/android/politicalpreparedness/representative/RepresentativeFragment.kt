@@ -11,6 +11,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -64,6 +67,7 @@ class DetailFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+
         // Define and assign Representative adapter
         viewModelAdapter = RepresentativeListAdapter(RepresentativeListAdapter.RepresentativeListener { representative ->
             // Link elections to voter info
@@ -81,15 +85,30 @@ class DetailFragment : Fragment() {
         //TODO: Establish button listeners for field and location search
         binding.buttonSearch.setOnClickListener {
 
-            var address = "us, ca"
-            viewModel.getRepresentativesByAddress(address)
+            var addr = "us, ca"
+            viewModel.getRepresentativesByAddress(addr)
         }
 
         binding.buttonLocation.setOnClickListener {
 
             getLocation()
-            //var ocdID = "ocd-division/country:us/state:la"
+            binding.address = address
+            //var ocdID ="ocd-division/country:us/state:la"
             //viewModel.getRepresentativesByDivisionId(ocdId = ocdID)
+        }
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        context?.let {
+            ArrayAdapter.createFromResource(
+                    it,
+                    R.array.states,
+                    android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                // Apply the adapter to the spinner
+                binding.state.adapter = adapter
+            }
         }
 
         return binding.root
@@ -173,6 +192,13 @@ class DetailFragment : Fragment() {
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+    }
+
+    private fun stateArray() {
+
+        val list = arrayListOf("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
+                "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",
+                "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
     }
 
 }
