@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,8 +20,6 @@ import com.example.android.politicalpreparedness.network.models.VoterInfoRespons
 
 class VoterInfoFragment : Fragment() {
 
-    private val dataSource = context?.let { ElectionDatabase.getInstance(it).electionDao }
-
     private lateinit var electionVoterInfo: Election
 
     //Declare ViewModel
@@ -28,12 +27,11 @@ class VoterInfoFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
         }
-
-        ViewModelProvider(this, VoterInfoViewModelFactory(dataSource)).get(VoterInfoViewModel::class.java)
+        ViewModelProvider(this, VoterInfoViewModelFactory(
+                ElectionDatabase.getInstance(activity.application).electionDao)).get(VoterInfoViewModel::class.java)
     }
 
     private lateinit var binding: FragmentVoterInfoBinding
-    private var isToggle = false
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -91,10 +89,7 @@ class VoterInfoFragment : Fragment() {
     }
 
     private fun clickToggleButton() {
-        binding.followButton.text = if (isToggle) context?.getString(R.string.follow) else context?.getString(R.string.unfollow)
-        isToggle = !isToggle
-
-        if (isToggle) viewModel.saveElection(electionVoterInfo) else viewModel.removeElection(electionVoterInfo?.id)
+       viewModel.clickAction(electionVoterInfo)
     }
 
     //Refresh adapters when fragment loads
@@ -110,6 +105,13 @@ class VoterInfoFragment : Fragment() {
                 binding.stateLocations.visibility = View.VISIBLE
                 binding.stateCorrespondenceHeader.visibility = View.VISIBLE
                 binding.addressGroup.visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer<String?> {
+            it?.let {
+                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                viewModel.resetErrorMsg()
             }
         })
     }

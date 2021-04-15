@@ -12,14 +12,28 @@ import com.example.android.politicalpreparedness.network.models.VoterInfoRespons
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class VoterInfoViewModel(private val dataSource: ElectionDao?) : ViewModel() {
-
+class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
     //Add live data to hold voter info
     private val _voterInfoResponse = MutableLiveData<VoterInfoResponse>()
     val voterInfoResponse: LiveData<VoterInfoResponse>
         get() = _voterInfoResponse
 
+
+    //Add live data to hold voter info
+    private val _buttonTitle = MutableLiveData<String>()
+    val buttonTitle: LiveData<String>
+        get() = _buttonTitle
+
+    //Add live data to hold voter info
+    private val _isSaved = MutableLiveData<Boolean>()
+    val isSaved: LiveData<Boolean>
+        get() = _isSaved
+
+    //Add live data to hold voter info
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?>
+        get() = _errorMessage
 
     //Add var and methods to populate voter info
     fun getVoterInfo(voterKey: String, electionId: String) {
@@ -28,28 +42,73 @@ class VoterInfoViewModel(private val dataSource: ElectionDao?) : ViewModel() {
             try {
                 val responseBody = CivicsApi.retrofitService.getVoterInfo(voterKey = voterKey, electionId = electionId)
                 _voterInfoResponse.value = parseVoterJsonResult((JSONObject(responseBody.string())))
-
+                getElection(electionId = electionId.toInt())
             } catch (e: Exception) {
-                //TODO MERVE hata mesaji bas
+                _errorMessage.postValue("Sorry something went wrong! Please try again later!")
             }
 
         }
     }
 
     //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    fun saveElection(election: Election) {
+    fun resetErrorMsg(){
+        _errorMessage.value = null
     }
 
-    fun removeElection(electionId: Int) {
+    fun clickAction(election: Election) {
+
+        var saveAction = isSaved.value ?: false
+
+        if (saveAction) {
+            removeElection(election.id)
+        } else {
+            saveElection(election)
+        }
+        //to reset values, check isdeleted
+        getElection(election.id)
+
     }
 
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
+    private fun saveElection(election: Election) {
+        viewModelScope.launch {
+            try {
+                dataSource.insertElection(election)
+            } catch (e: Exception){
+                _errorMessage.postValue("Sorry something went wrong! Please try again later!")
+            }
+        }
+    }
+
+    private fun removeElection(electionId: Int) {
+        viewModelScope.launch{
+            try {
+                 dataSource.deleteElectionById(electionId.toString())
+            } catch (e: Exception){
+                _errorMessage.postValue("Sorry something went wrong! Please try again later!")
+            }
+        }
+    }
 
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
+    private fun getElection(electionId: Int) {
+        viewModelScope.launch{
+            try {
+                var election = dataSource.getElectionById(electionId.toString())
+
+                if (election == null) {
+                    _isSaved.postValue(false)
+                    _buttonTitle.postValue( "Follow Election")
+                } else {
+                    _isSaved.postValue(true)
+                    _buttonTitle.postValue( "Unfollow Election")
+                }
+            } catch (e: Exception){
+                _errorMessage.postValue("Sorry something went wrong! Please try again later!")
+            }
+        }
+    }
 
 
 }
