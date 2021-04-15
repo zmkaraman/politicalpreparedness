@@ -19,18 +19,15 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
     val voterInfoResponse: LiveData<VoterInfoResponse>
         get() = _voterInfoResponse
 
-
-    //Add live data to hold voter info
     private val _buttonTitle = MutableLiveData<String>()
     val buttonTitle: LiveData<String>
         get() = _buttonTitle
 
-    //Add live data to hold voter info
     private val _isSaved = MutableLiveData<Boolean>()
     val isSaved: LiveData<Boolean>
         get() = _isSaved
 
-    //Add live data to hold voter info
+    //Add live data to hold err msg
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?>
         get() = _errorMessage
@@ -60,11 +57,15 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
         if (saveAction) {
             removeElection(election.id)
+            _isSaved.postValue(false)
+            _buttonTitle.postValue( "Follow Election")
         } else {
             saveElection(election)
+            _isSaved.postValue(true)
+            _buttonTitle.postValue( "Unfollow Election")
         }
         //to reset values, check isdeleted
-        getElection(election.id)
+        //getElection(election.id)
 
     }
 
@@ -108,6 +109,5 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
             }
         }
     }
-
 
 }

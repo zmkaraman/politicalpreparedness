@@ -38,8 +38,12 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             binding.representative = item
             binding.representativePhoto.setImageResource(R.drawable.ic_profile)
 
-            //TODO: Show social links ** Hint: Use provided helper methods
-            //TODO: Show www link ** Hint: Use provided helper methods
+            //Show social links ** Hint: Use provided helper methods
+            item.official.channels?.let { showSocialLinks(it) }
+
+            //Show www link ** Hint: Use provided helper methods
+            item.official.urls?.let { showWWWLinks(it) }
+
 
             binding.executePendingBindings()
         }
@@ -49,7 +53,7 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             fun from(parent: ViewGroup): RepresentativeListAdapter.RepresentativeViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemRepresentativeBinding.inflate(layoutInflater, parent, false)
-                return RepresentativeListAdapter.RepresentativeViewHolder(binding)
+                return RepresentativeViewHolder(binding)
             }
         }
 

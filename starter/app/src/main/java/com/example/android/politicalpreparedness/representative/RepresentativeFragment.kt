@@ -12,8 +12,6 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -30,7 +28,6 @@ import java.util.Locale
 
 class DetailFragment : Fragment() {
 
-
     companion object {
         //Add Constant for Location request
         const val REQUEST_LOCATION_PERMISSION = 1123
@@ -42,7 +39,6 @@ class DetailFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
         }
-
         ViewModelProvider(this, RepresentativeViewModelFactory()).get(RepresentativeViewModel::class.java)
     }
 
@@ -142,14 +138,21 @@ class DetailFragment : Fragment() {
 
             }
         })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer<String?> {
+            it?.let {
+                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                viewModel.resetErrorMsg()
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         //Handle location permission result to get location on permission granted
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                //TODO MERVE enableMyLocation()
+            if (isPermissionGranted()) {
+               getLocation() //TODO MERVE
             } else {
                 Toast.makeText(context, "PERMISSION NOT GRANTED", Toast.LENGTH_SHORT).show()
             }
@@ -161,7 +164,7 @@ class DetailFragment : Fragment() {
             true
         } else {
             //Request Location permissions
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
             false
         }
     }

@@ -37,20 +37,3 @@ fun parseVoterJsonResult(jsonResult: JSONObject): VoterInfoResponse {
     return Gson()?.fromJson(jsonResult.toString(), VoterInfoResponse::class.java)
 }
 
-fun parseRepresentativesResult(jsonResult: JSONObject): ArrayList<Representative> {
-
-    var response =  Gson()?.fromJson(jsonResult.toString(), RepresentativeResponse::class.java)
-
-    val representativeList = ArrayList<Representative>()
-
-    response.offices
-
-    for (official in response.officials) {
-
-        var office = response.offices.first()//TODO MERVE simdlik bos
-        var representative = Representative(office = office, official = official)
-        representativeList.add(representative)
-    }
-
-    return representativeList
-}
