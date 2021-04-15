@@ -24,6 +24,8 @@ class RepresentativeViewModel: ViewModel() {
     //Create function to fetch representatives from API from a provided address
     fun getRepresentativesByAddress(address: String) {
 
+
+
         viewModelScope.launch {
             try {
                 val responseBody = CivicsApi.retrofitService.getRepresentativesByAdress(address = address)
@@ -31,6 +33,8 @@ class RepresentativeViewModel: ViewModel() {
                 _representatives.value = parseRepresentativesResult(JSONObject(responseBody.string()))
 
                // _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
+
+
 
 
             } catch (e: Exception) {
@@ -42,7 +46,8 @@ class RepresentativeViewModel: ViewModel() {
 
 
     /**
-     *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
+     *  The following code will prove helpful in constructing a representative from the API.
+     *  This code combines the two nodes of the RepresentativeResponse into a single official :
 
     val (offices, officials) = getRepresentativesDeferred.await()
     _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }

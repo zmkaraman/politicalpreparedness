@@ -5,11 +5,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
-import com.example.android.politicalpreparedness.network.models.Election
 
 
 @BindingAdapter("profileImage")
@@ -36,13 +33,6 @@ fun Spinner.setNewValue(value: String?) {
             setSelection(position)
         }
     }
-}
-
-//TODO MERVE yerini degistirebilirsin
-@BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?) {
-    val adapter = recyclerView.adapter as ElectionListAdapter
-    adapter.submitList(data)
 }
 
 inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T>{

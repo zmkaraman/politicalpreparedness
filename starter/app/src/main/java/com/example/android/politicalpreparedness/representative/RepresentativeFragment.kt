@@ -70,7 +70,7 @@ class DetailFragment : Fragment() {
 
         // Define and assign Representative adapter
         viewModelAdapter = RepresentativeListAdapter(RepresentativeListAdapter.RepresentativeListener { representative ->
-            // Link elections to voter info
+            // Link elections to voter info TODO MERVE why
             //this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
             Toast.makeText(context, "Representative ${representative.office.name}", Toast.LENGTH_SHORT).show()
         })
@@ -82,19 +82,26 @@ class DetailFragment : Fragment() {
         binding.representativesRv.adapter = viewModelAdapter
 
 
-        //TODO: Establish button listeners for field and location search
+        //Establish button listeners for field and location search
         binding.buttonSearch.setOnClickListener {
 
-            var addr = "us, ca"
-            viewModel.getRepresentativesByAddress(addr)
+            hideKeyboard()
+            addressToBeUpdated()
+            if (::address.isInitialized) {
+                //check new address entered
+                viewModel.getRepresentativesByAddress(address.toFormattedString())
+            } else {
+                Toast.makeText(context, R.string.address_error_msg, Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.buttonLocation.setOnClickListener {
 
             getLocation()
-            binding.address = address
-            //var ocdID ="ocd-division/country:us/state:la"
-            //viewModel.getRepresentativesByDivisionId(ocdId = ocdID)
+            if (::address.isInitialized) {
+                binding.address = address
+                viewModel.getRepresentativesByAddress(address.toFormattedString())
+            }
         }
 
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -112,6 +119,16 @@ class DetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun addressToBeUpdated(){
+        var line1 : String = binding.addressLine1.text.toString()
+        var line2 : String = binding.addressLine2.text.toString()
+        var city : String = binding.city.text.toString()
+        var zip : String = binding.zip.text.toString()
+        var state : String = binding.state.selectedItem.toString()
+
+        address = Address(line1, line2, city, state, zip)
     }
 
     //Refresh adapters when fragment loads
@@ -174,6 +191,8 @@ class DetailFragment : Fragment() {
                 val location: Location? = locationManager.getLastKnownLocation(strLocationProvider)
                 location?.let {
                     address = geoCodeLocation(location)
+                } ?: run {
+                    Toast.makeText(context, R.string.location_error_msg, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -194,11 +213,5 @@ class DetailFragment : Fragment() {
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
     }
 
-    private fun stateArray() {
-
-        val list = arrayListOf("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
-                "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",
-                "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
-    }
 
 }
