@@ -10,8 +10,8 @@ import com.example.android.politicalpreparedness.network.models.Election
 
 class ElectionListAdapter(private val clickListener: ElectionListener): ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
 
-    class ElectionListener (val clickListener: (asteroid: Election) -> Unit) {
-        fun onClick(asteroid: Election) = clickListener(asteroid)
+    class ElectionListener (val clickListener: (election: Election) -> Unit) {
+        fun onClick(election: Election) = clickListener(election)
     }
 
     class ElectionViewHolder (private var binding: ListItemElectionBinding):

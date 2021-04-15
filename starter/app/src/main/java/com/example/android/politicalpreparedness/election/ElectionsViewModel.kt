@@ -24,12 +24,14 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
     val savedElections: LiveData<List<Election>>
         get() = _savedElections
 
-
     //Add live data to hold voter info
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?>
         get() = _errorMessage
 
+    private val _navigateToSelectedElection = MutableLiveData<Election>()
+    val navigateToSelectedElection: LiveData<Election>
+        get() = _navigateToSelectedElection
 
     // Create val and functions to populate live data for upcoming elections from the API and
     fun getElections() {
@@ -63,7 +65,13 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
         _errorMessage.value = null
     }
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
+    //Create functions to navigate to saved or upcoming election voter info
+    fun displayElectionDetails(election: Election) {
+        _navigateToSelectedElection.value = election
+    }
 
+    fun displaElectionDetailsComplete() {
+        _navigateToSelectedElection.value = null
+    }
 
 }

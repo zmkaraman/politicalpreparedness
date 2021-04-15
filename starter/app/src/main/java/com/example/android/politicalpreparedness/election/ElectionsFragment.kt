@@ -51,16 +51,12 @@ class ElectionsFragment : Fragment() {
 
         //Add binding values
         viewModelAdapter = ElectionListAdapter(ElectionListAdapter.ElectionListener { election ->
-            // Link elections to voter info
-            this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
-
+            viewModel.displayElectionDetails(election)
         })
 
         //Add binding values
         viewModelSavedAdapter = ElectionListAdapter(ElectionListAdapter.ElectionListener { election ->
-            // Link elections to voter info
-            this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
-
+            viewModel.displayElectionDetails(election)
         })
 
         // Populate recycler adapters
@@ -102,6 +98,13 @@ class ElectionsFragment : Fragment() {
             it?.let {
                 Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
                 viewModel.resetErrorMsg()
+            }
+        })
+
+        viewModel.navigateToSelectedElection.observe(viewLifecycleOwner, Observer { election ->
+            if (null != election) {
+                this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
+                viewModel.displaElectionDetailsComplete()
             }
         })
     }
