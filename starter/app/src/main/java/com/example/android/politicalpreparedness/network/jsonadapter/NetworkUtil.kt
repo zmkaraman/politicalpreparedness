@@ -10,6 +10,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 
 
+/*
 fun parseElectionsJsonResult(jsonResult: JSONObject): ArrayList<Election> {
 
     val electionsJson = jsonResult.getJSONArray("elections")
@@ -37,3 +38,4 @@ fun parseVoterJsonResult(jsonResult: JSONObject): VoterInfoResponse {
     return Gson()?.fromJson(jsonResult.toString(), VoterInfoResponse::class.java)
 }
 
+*/

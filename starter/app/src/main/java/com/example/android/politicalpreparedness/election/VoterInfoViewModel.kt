@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.jsonadapter.parseVoterJsonResult
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
@@ -19,6 +17,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
     val voterInfoResponse: LiveData<VoterInfoResponse>
         get() = _voterInfoResponse
 
+    //Add live data for button title
     private val _buttonTitle = MutableLiveData<String>()
     val buttonTitle: LiveData<String>
         get() = _buttonTitle
@@ -37,8 +36,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val responseBody = CivicsApi.retrofitService.getVoterInfo(voterKey = voterKey, electionId = electionId)
-                _voterInfoResponse.value = parseVoterJsonResult((JSONObject(responseBody.string())))
+                _voterInfoResponse.value = CivicsApi.retrofitService.getVoterInfo(voterKey = voterKey, electionId = electionId)
                 getElection(electionId = electionId.toInt())
             } catch (e: Exception) {
                 _errorMessage.postValue("Sorry something went wrong! Please try again later!")
@@ -57,16 +55,15 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
         if (saveAction) {
             removeElection(election.id)
+            //to reset values
             _isSaved.postValue(false)
             _buttonTitle.postValue( "Follow Election")
         } else {
             saveElection(election)
+            //to reset values
             _isSaved.postValue(true)
             _buttonTitle.postValue( "Unfollow Election")
         }
-        //to reset values, check isdeleted
-        //getElection(election.id)
-
     }
 
     private fun saveElection(election: Election) {

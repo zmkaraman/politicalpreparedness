@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.jsonadapter.parseElectionsJsonResult
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 
 class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
@@ -39,7 +37,7 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
             try {
                 val responseBody = CivicsApi.retrofitService.getElections()
                 //upcomingElections = parseElectionsJsonResult((JSONObject(responseBody.string())))
-                _upcomingElection.value = parseElectionsJsonResult((JSONObject(responseBody.string())))
+                _upcomingElection.value = responseBody.elections //parseElectionsJsonResult((JSONObject(responseBody.string())))
 
             } catch (e: Exception) {
                 _errorMessage.postValue("Sorry something went wrong! Please try again later!")

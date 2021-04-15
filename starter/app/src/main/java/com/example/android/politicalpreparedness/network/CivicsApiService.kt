@@ -1,7 +1,9 @@
 package com.example.android.politicalpreparedness.network
 
 import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
+import com.example.android.politicalpreparedness.network.models.ElectionResponse
 import com.example.android.politicalpreparedness.network.models.RepresentativeResponse
+import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -39,11 +41,12 @@ interface CivicsApiService {
     //Add elections API Call
     //https://www.googleapis.com/civicinfo/v2/elections?key=AIzaSyCv7qJbUF87wxet4psRA_P3hKqLEDvsFVg
     @GET("elections")
-    suspend fun getElections(@Query("key") apiKey: String = API_KEY): ResponseBody
+    suspend fun getElections(@Query("key") apiKey: String = API_KEY): ElectionResponse
 
     //https://www.googleapis.com/civicinfo/v2/voterinfo?key=AIzaSyCv7qJbUF87wxet4psRA_P3hKqLEDvsFVg&voter_key=us,%20la&electionId=7022
     @GET("voterinfo")
-    suspend fun getVoterInfo(@Query("key") apiKey: String = API_KEY, @Query("voter_key") voterKey: String?, @Query("electionId") electionId: String?): ResponseBody
+    suspend fun getVoterInfo(@Query("key") apiKey: String = API_KEY, @Query("voter_key") voterKey: String?,
+                             @Query("electionId") electionId: String?): VoterInfoResponse
     
     //https://www.googleapis.com/civicinfo/v2/representatives  byadress
     @GET("representatives")
