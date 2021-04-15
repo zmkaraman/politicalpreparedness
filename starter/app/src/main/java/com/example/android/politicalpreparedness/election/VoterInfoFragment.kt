@@ -96,18 +96,6 @@ class VoterInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.voterInfoResponse.observe(viewLifecycleOwner, Observer<VoterInfoResponse> { voterInfoResponse ->
-            voterInfoResponse?.apply {
-
-                //TODO MERVE binding adaptera tasi
-                binding.stateHeader.visibility = View.VISIBLE
-                binding.stateBallot.visibility = View.VISIBLE
-                binding.stateLocations.visibility = View.VISIBLE
-                binding.stateCorrespondenceHeader.visibility = View.VISIBLE
-                binding.addressGroup.visibility = View.VISIBLE
-            }
-        })
-
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer<String?> {
             it?.let {
                 Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()

@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/election_info"
             android:layout_marginTop="@dimen/default_padding_20"
-            android:visibility="invisible"
+            app:checkVisible="@{viewModel.voterInfoResponse}"
             android:textAppearance="?textAppearanceHeadline4"
             app:layout_constraintTop_toBottomOf="@id/election_date"
             app:layout_constraintStart_toStartOf="@id/election_date" />
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="@string/voting_locations"
             android:layout_marginTop="@dimen/default_padding_small"
-            android:visibility="invisible"
+            app:checkVisible="@{viewModel.voterInfoResponse}"
             android:textAppearance="?textAppearanceHeadline3"
             app:layout_constraintTop_toBottomOf="@id/state_header"
             app:layout_constraintStart_toStartOf="@id/election_date" />
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ballot_info"
             android:layout_marginTop="@dimen/default_padding_small"
-            android:visibility="invisible"
+            app:checkVisible="@{viewModel.voterInfoResponse}"
             android:textAppearance="?textAppearanceHeadline3"
             app:layout_constraintTop_toBottomOf="@id/state_locations"
             app:layout_constraintStart_toStartOf="@id/election_date" />
@@ -84,7 +84,6 @@
             android:id="@+id/address_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:textAppearance="?textAppearanceHeadline3"
             android:layout_marginTop="@dimen/default_padding_small"
             app:constraint_referenced_ids="state_correspondence_header,address" />
@@ -94,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/correspondence_address"
-            android:visibility="invisible"
+            app:checkVisible="@{viewModel.voterInfoResponse}"
             android:textAppearance="?textAppearanceHeadline4"
             android:layout_marginTop="@dimen/default_padding_small"
             app:layout_constraintTop_toBottomOf="@id/state_ballot"
@@ -117,6 +116,7 @@
             style="@style/PrimaryButton"
             android:text="@{viewModel.buttonTitle}"
             android:layout_margin="@dimen/default_padding_20"
+            app:checkVisible="@{viewModel.voterInfoResponse}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
