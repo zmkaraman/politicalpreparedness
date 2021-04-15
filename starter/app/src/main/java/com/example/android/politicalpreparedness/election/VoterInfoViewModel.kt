@@ -50,7 +50,6 @@ class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
         }
     }
 
-    //TODO: Add var and methods to support loading URLs
     fun resetErrorMsg(){
         _errorMessage.value = null
     }

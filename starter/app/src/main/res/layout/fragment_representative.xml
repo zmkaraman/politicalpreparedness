@@ -24,6 +24,7 @@
             android:id="@+id/constraint_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/default_padding"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -39,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Add data binding value -->
-            <!-- TODO: Add visual styling and content -->
+            <!-- Add visual styling and content -->
             <EditText
                 android:id="@+id/address_line_1"
                 android:layout_width="match_parent"
@@ -47,11 +48,12 @@
                 android:hint="@string/address_line_first"
                 android:inputType="textPostalAddress"
                 android:text="@{address.line1}"
+                style="@style/Regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_title" />
 
             <!--  Add data binding value -->
-            <!-- TODO: Add visual styling and content -->
+            <!--  Add visual styling and content -->
             <EditText
                 android:id="@+id/address_line_2"
                 android:layout_width="match_parent"
@@ -59,11 +61,12 @@
                 android:hint="@string/address_line_second"
                 android:inputType="textPostalAddress"
                 android:text="@{address.line2}"
+                style="@style/Regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
             <!-- Add data binding value -->
-            <!-- TODO: Add visual styling and content -->
+            <!-- Add visual styling and content -->
             <EditText
                 android:id="@+id/city"
                 android:layout_width="0dp"
@@ -71,19 +74,21 @@
                 android:hint="@string/city"
                 android:inputType="textPostalAddress"
                 android:text="@{address.city}"
+                style="@style/Regular"
                 app:layout_constraintEnd_toStartOf="@id/state"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
             <!-- Add default values from provided resources  -->
             <!-- Add data binding value -->
-            <!-- TODO: Add visual styling and content -->
+            <!-- Add visual styling and content -->
             <Spinner
                 android:id="@+id/state"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:hint="@string/zip"
                 android:inputType="textPostalAddress"
+                style="@style/Regular"
                 app:layout_constraintBottom_toBottomOf="@id/city"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/city"
@@ -91,7 +96,7 @@
                 app:stateValue="@{address.state}" />
 
             <!--  Add data binding value -->
-            <!-- TODO: Add visual styling and content -->
+            <!--  Add visual styling and content -->
             <EditText
                 android:id="@+id/zip"
                 android:layout_width="0dp"
@@ -100,6 +105,7 @@
                 android:inputType="number"
                 android:maxLength="5"
                 android:text="@{address.zip}"
+                style="@style/Regular"
                 app:layout_constraintEnd_toEndOf="@id/city"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/city" />
@@ -155,18 +161,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/representative_title" />
-
-            <!-- TODO: Add visual styling and content -->
-            <TextView
-                android:id="@+id/list_placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/representative_title"
-                motion:visibilityMode="ignore" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

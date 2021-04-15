@@ -26,7 +26,12 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
     val savedElections: LiveData<List<Election>>
         get() = _savedElections
 
-    var upcomingElections: List<Election> = mutableListOf()
+    var upcomingElections: List<Election> = mutableListOf() //TODO MERVE
+
+    //Add live data to hold voter info
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?>
+        get() = _errorMessage
 
 
     // Create val and functions to populate live data for upcoming elections from the API and
@@ -38,6 +43,8 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
                 _upcomingElection.value = upcomingElections
 
             } catch (e: Exception) {
+                _errorMessage.postValue("Sorry something went wrong! Please try again later!")
+
             }
 
         }
@@ -55,6 +62,9 @@ class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
         }
     }
 
+    fun resetErrorMsg(){
+        _errorMessage.value = null
+    }
     //TODO: Create functions to navigate to saved or upcoming election voter info
 
 
