@@ -65,11 +65,7 @@ class DetailFragment : Fragment() {
 
 
         // Define and assign Representative adapter
-        viewModelAdapter = RepresentativeListAdapter(RepresentativeListAdapter.RepresentativeListener { representative ->
-            // Link elections to voter info TODO MERVE why
-            //this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election, election.division))
-            Toast.makeText(context, "Representative ${representative.office.name}", Toast.LENGTH_SHORT).show()
-        })
+        viewModelAdapter = RepresentativeListAdapter()
 
         //Populate Representative adapter
         // Populate recycler adapters

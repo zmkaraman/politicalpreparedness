@@ -15,13 +15,8 @@ import com.example.android.politicalpreparedness.databinding.ListItemRepresentat
 import com.example.android.politicalpreparedness.network.models.Channel
 import com.example.android.politicalpreparedness.representative.model.Representative
 
-class RepresentativeListAdapter(private val clickListener: RepresentativeListener):
+class RepresentativeListAdapter :
         ListAdapter<Representative, RepresentativeListAdapter.RepresentativeViewHolder>(RepresentativeDiffCallback){
-
-    //Create RepresentativeListener
-    class RepresentativeListener(val clickListener: (representative: Representative) -> Unit) {
-        fun onClick(representative: Representative) = clickListener(representative)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
         return RepresentativeViewHolder.from(parent)
