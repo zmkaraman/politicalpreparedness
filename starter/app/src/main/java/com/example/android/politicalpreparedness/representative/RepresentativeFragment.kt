@@ -24,6 +24,7 @@ import com.example.android.politicalpreparedness.databinding.FragmentRepresentat
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.model.Representative
+import java.lang.Exception
 import java.util.Locale
 
 class DetailFragment : Fragment() {
@@ -47,7 +48,7 @@ class DetailFragment : Fragment() {
 
     private var viewModelAdapter: RepresentativeListAdapter? = null
 
-    private lateinit var address: Address
+    //private lateinit var address: Address
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -79,20 +80,18 @@ class DetailFragment : Fragment() {
 
             hideKeyboard()
             addressToBeUpdated()
-            if (::address.isInitialized) {
+            if (viewModel.address.value != null) {
                 //check new address entered
-                viewModel.getRepresentativesByAddress(address.toFormattedString())
+                viewModel.getRepresentativesByAddress()
             } else {
                 Toast.makeText(context, R.string.address_error_msg, Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.buttonLocation.setOnClickListener {
-
             getLocation()
-            if (::address.isInitialized) {
-                binding.address = address
-                viewModel.getRepresentativesByAddress(address.toFormattedString())
+            if (viewModel.address.value != null) {
+                viewModel.getRepresentativesByAddress()
             }
         }
 
@@ -113,14 +112,14 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun addressToBeUpdated(){
-        var line1 : String = binding.addressLine1.text.toString()
-        var line2 : String = binding.addressLine2.text.toString()
-        var city : String = binding.city.text.toString()
-        var zip : String = binding.zip.text.toString()
-        var state : String = binding.state.selectedItem.toString()
+    private fun addressToBeUpdated() {
+        var line1: String = binding.addressLine1.text.toString()
+        var line2: String = binding.addressLine2.text.toString()
+        var city: String = binding.city.text.toString()
+        var zip: String = binding.zip.text.toString()
+        var state: String = binding.state.selectedItem.toString()
 
-        address = Address(line1, line2, city, state, zip)
+        viewModel.setAddressFromInput(Address(line1, line2, city, state, zip))
     }
 
     //Refresh adapters when fragment loads
@@ -148,7 +147,8 @@ class DetailFragment : Fragment() {
         //Handle location permission result to get location on permission granted
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (isPermissionGranted()) {
-               getLocation() //TODO MERVE
+                getLocation()
+                viewModel.getRepresentativesByAddress()
             } else {
                 Toast.makeText(context, "PERMISSION NOT GRANTED", Toast.LENGTH_SHORT).show()
             }
@@ -176,24 +176,30 @@ class DetailFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         //Get location from LocationServices
-        var locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val criteria = Criteria()
-        criteria.accuracy = Criteria.ACCURACY_FINE
-        criteria.isAltitudeRequired = false
-        criteria.isBearingRequired = false
-        criteria.isCostAllowed = true
-        val strLocationProvider = locationManager.getBestProvider(criteria, true)
+        try {
+            var locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        if (checkLocationPermissions()) {
-            strLocationProvider?.let {
-                val location: Location? = locationManager.getLastKnownLocation(strLocationProvider)
-                location?.let {
-                    address = geoCodeLocation(location)
-                } ?: run {
-                    Toast.makeText(context, R.string.location_error_msg, Toast.LENGTH_SHORT).show()
+            val criteria = Criteria()
+            criteria.accuracy = Criteria.ACCURACY_FINE
+            criteria.isAltitudeRequired = false
+            criteria.isBearingRequired = false
+            criteria.isCostAllowed = true
+            val strLocationProvider = locationManager.getBestProvider(criteria, true)
+
+            if (checkLocationPermissions()) {
+                strLocationProvider?.let {
+                    val location: Location? = locationManager.getLastKnownLocation(strLocationProvider)
+                    location?.let {
+                        //address = geoCodeLocation(location)
+                        viewModel.setAddressFromInput(geoCodeLocation(location))
+                    } ?: run {
+                        Toast.makeText(context, R.string.location_error_msg, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Toast.makeText(context, R.string.location_error_msg, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -6,7 +6,7 @@ import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
 import kotlinx.coroutines.launch
 
-class RepresentativeViewModel: ViewModel() {
+class RepresentativeViewModel : ViewModel() {
 
     //Establish live data for representatives and address
     private val _representatives = MutableLiveData<List<Representative>>()
@@ -23,12 +23,16 @@ class RepresentativeViewModel: ViewModel() {
         get() = _errorMessage
 
     //Create function to fetch representatives from API from a provided address
-    fun getRepresentativesByAddress(address: String) {
+    fun getRepresentativesByAddress() {
 
         viewModelScope.launch {
             try {
-                val (offices, officials) = CivicsApi.retrofitService.getRepresentatives(address = address)
-                _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
+                _address.value?.let {
+                    val (offices, officials) = CivicsApi.retrofitService.getRepresentatives(address = it?.toFormattedString())
+                    _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
+                } ?: run {
+                    _errorMessage.postValue("Something is wrong with adress! Please try again later!")
+                }
 
             } catch (e: Exception) {
                 _errorMessage.postValue("Sorry something went wrong! Please try again later!")
@@ -49,16 +53,18 @@ class RepresentativeViewModel: ViewModel() {
 
      */
 
-    //TODO: Create function get address from geo location
+    //Create function get address from geo location
+    //Create function to get address from individual fields
+    fun setAddressFromInput(address: Address) {
+        _address.value = address
+    }
 
-    //TODO: Create function to get address from individual fields
-
-    fun resetErrorMsg(){
+    fun resetErrorMsg() {
         _errorMessage.value = null
     }
 }
 
-class RepresentativeViewModelFactory: ViewModelProvider.Factory {
+class RepresentativeViewModelFactory : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
